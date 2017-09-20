@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  	<classPathEntry location="D:/apache-maven-3.0.4/repository/mysql/mysql-connector-java/5.1.20/mysql-connector-java-5.1.20.jar" />
+  <context id="context1">
+    <jdbcConnection 
+    	connectionURL="jdbc:mysql://localhost:3306/sn-admin?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" 
+    	driverClass="com.mysql.jdbc.Driver" 
+    	password="123456" 
+    	userId="root" />
+    <javaModelGenerator targetPackage="com.guojianghao.entity.sys" targetProject="sn-admin" />
+    <sqlMapGenerator targetPackage="com.guojianghao.mapper.sys" targetProject="sn-admin" />
+    <javaClientGenerator targetPackage="com.guojianghao.mapper.sys" targetProject="sn-admin" type="XMLMAPPER" />
+    <table schema="sn-admin" tableName="sys_role"/>
+    <table schema="sn-admin" tableName="sys_resource"/>
+      <!-- <columnOverride column="???" property="???" /> -->
+  </context>
+</generatorConfiguration>
