@@ -13,4 +13,8 @@ public interface SysUserService{
 
 	public int getSysUserCount(Map<String, Object> map);
 
+	public int saveSysUser(SysUser sysUser);
+
+	public int deleteSysUser(int id);
+
 }

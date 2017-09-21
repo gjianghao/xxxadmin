@@ -1,5 +1,6 @@
 package com.guojianghao.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,17 @@ public class SysUserServiceImpl implements SysUserService{
 	@Override
 	public int getSysUserCount(Map<String, Object> map) {
 		return sysUserMapper.getSysUserCount(map);
+	}
+
+	@Override
+	public int saveSysUser(SysUser sysUser) {
+		sysUser.setCreateTime(new Date());
+		return sysUserMapper.insert(sysUser);
+	}
+
+	@Override
+	public int deleteSysUser(int id) {
+		return sysUserMapper.deleteByPrimaryKey(id);
 	}
 
 }

@@ -18,6 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
 		String requestURI = request.getRequestURI().replace(request.getContextPath(), "");
 
 		if (this.excludedUrls != null && this.excludedUrls.size() > 0) {

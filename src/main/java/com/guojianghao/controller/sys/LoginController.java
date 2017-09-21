@@ -20,7 +20,7 @@ import com.guojianghao.util.Constant;
 /**
  * 
  * @Description:<p>后台登录</p>
- * @author 17050049
+ * @author king
  * @date 2017年9月20日 下午2:50:41
  */
 @Controller

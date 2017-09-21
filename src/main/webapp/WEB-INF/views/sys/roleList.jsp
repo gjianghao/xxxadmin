@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户管理</title>
+<title>角色管理</title>
 <script type="text/javascript" src="<%=path %>/static/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="<%=path %>/static/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="<%=path %>/static/easyui/locale/easyui-lang-zh_CN.js"></script>
@@ -19,8 +19,7 @@
 <script type="text/javascript">
 	function doSearch(){
 		$("#tt").datagrid('load', {
-            "username": $("#username").val(),
-            "realName":$("#realName").val()
+            "roleName": $("#roleName").textbox('getValue')
     	});
 	}
 	
@@ -29,31 +28,21 @@
 	}
 	function addSubmitForm(){
 		$('#addff').form('submit', {
-	        url:"<%=path%>/sysUser/saveUser",
+	        url:"<%=path%>/sysRole/saveRole",
 	        onSubmit: function(){
-	                var addUname = $("input[name='addUname']").val();
-	                var addRname = $("input[name='addRname']").val();
-	                var addPwd = $("input[name='addPwd']").val();
-	                if(addUname == ""){
-	                	$.messager.alert('Info', '用户名不能为空');
-	                	return false;
-	                }
-	                if(addRname == ""){
-	                	$.messager.alert('Info', '姓名不能为空');
-	                	return false;
-	                }
-	                if(addPwd == ""){
-	                	$.messager.alert('Info', '密码不能为空');
+	                var name = $("input[name='name']").val();
+	                if(name == ""){
+	                	$.messager.alert('提示', '角色名不能为空');
 	                	return false;
 	                }
 	        },
 	        success:function(data){
 	                if(data == "success"){
-	                	$.messager.alert('Info', '添加用户成功');
+	                	$.messager.alert('提示', '添加角色成功');
 	                	addClearForm();
 	                	$("#tt").datagrid('reload')
 	                }else{
-	                	$.messager.alert('Info', '添加用户失败');
+	                	$.messager.alert('提示', '添加角色失败');
 	                }
 	        }
 		});
@@ -63,8 +52,45 @@
 		$('#addWin').window('close');
 	}
 	
+	function updateRole(){
+		var rows = $('#tt').datagrid('getSelections');
+		if(rows == null || rows == "" || rows == undefined){
+			$.messager.alert('提示', '没有选中任何记录，不能修改');
+			return;
+		}
+		var row = rows[0];
+		$("#update_id").val(row.id);
+		$("#update_name").textbox('setValue',row.name);
+		$("#update_description").textbox('setValue',row.description);
+		$('#updateWin').window('open');
+	}
+	function updateCancle(){
+		$('#updateWin').window('close');
+	}
+	function updateRoleSubmit(){
+		$('#updateff').form('submit', {
+	        url:"<%=path%>/sysRole/updateRole",
+	        onSubmit: function(){
+	                var name = $("#update_name").textbox('getValue');
+	                if(name == ""){
+	                	$.messager.alert('提示', '角色名不能为空');
+	                	return false;
+	                }
+	        },
+	        success:function(data){
+	                if(data == "success"){
+	                	$.messager.alert('提示', '修改角色成功');
+	                	$('#updateWin').window('close');
+	                	$("#tt").datagrid('reload')
+	                }else{
+	                	$.messager.alert('提示', '修改角色失败');
+	                }
+	        }
+		});
+	}
 	
-	function deleteUser(){
+	
+	function deleteRole(){
 		var rows = $('#tt').datagrid('getSelections');
 		if(rows == null || rows == "" || rows == undefined){
 			$.messager.alert('提示', '没有选中任何记录，不能删除');
@@ -75,7 +101,7 @@
 			if (r){
 				$.ajax({
 					   type: "POST",
-					   url: "<%=path%>/sysUser/deleteUser",
+					   url: "<%=path%>/sysRole/deleteRole",
 					   data: {'id':id},
 					   success: function(data){
 						   if(data == "success"){
@@ -90,12 +116,12 @@
 		});
 	}
 	
-	function roleView(id){
+	function resourceView(id){
 		$("#hidden_user_id").val(id);
 		$.ajax({
 			   type: "POST",
-			   url: "<%=path%>/sysUser/getRoles",
-			   data: {'userId':id},
+			   url: "<%=path%>/sysRole/getResources",
+			   data: {'roleId':id},
 			   success: function(data){
 				   var allRoleList = data.data1;
 				   var selfRoleList = data.data2;
@@ -149,41 +175,34 @@
 	}
 	
 	
-	function formatRole(val,row){
-		return '<span style=""><a style="text-decoration:none" href="javascript:void(0)" onclick="roleView('+row.id+')" >赋权</a></span>';
+	function formatResource(val,row){
+		return '<span style=""><a style="text-decoration:none" href="javascript:void(0)" onclick="resourceView('+row.id+')" >资源</a></span>';
 	}
-	
-	function formatDate(value,row,index){  
-		var unixTimestamp = new Date(value);  
-		return unixTimestamp.toLocaleString();  
-	}  
 
 </script>
 </head>
 <body>
-	<table id="tt" class="easyui-datagrid" title="用户管理" pagination="true" fit="true" style="width:700px;height:250px"
-			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysUser/datagrid',method:'get',toolbar:'#tb'">
+	<table id="tt" class="easyui-datagrid" title="角色管理" pagination="true" fit="true" style="width:700px;height:250px"
+			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysRole/datagrid',method:'get',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<th data-options="field:'id',width:100,align:'center',hidden:'true'">ID</th>
-				<th data-options="field:'username',width:100,align:'center'">用户名</th>
-				<th data-options="field:'realName',width:100,align:'center'">姓名</th>
-				<th data-options="field:'createTime',width:150,align:'center'" formatter="formatDate">添加时间</th>
-				<th data-options="field:'操作',width:80,align:'center'" formatter="formatRole">操作</th>
+				<th data-options="field:'name',width:100,align:'center'">角色名称</th>
+				<th data-options="field:'description',width:150,align:'center'">角色描述</th>
+				<th data-options="field:'分配资源',width:80,align:'center'" formatter="formatResource">操作</th>
 			</tr>
 		</thead>
 	</table>
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="margin-bottom:5px">
 			<a href="javascript:void(0)" onclick="addView()" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
-			<!-- <a href="javascript:void(0)" onclick="updateUser()" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a> -->
+			<a href="javascript:void(0)" onclick="updateRole()" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
 			<!-- <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a> -->
-			<a href="javascript:void(0)" onclick="deleteUser()" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+			<a href="javascript:void(0)" onclick="deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
 		</div>
 		<div>
-			用户名: <input class="easyui-textbox" type="text" id="username"/> <!-- data-options="required:true" -->
-			姓名: <input class="easyui-textbox" type="text" id="realName"/>
+			角色名称: <input class="easyui-textbox" type="text" id="roleName"/> <!-- data-options="required:true" -->
 			<!-- Date From: <input class="easyui-datebox" style="width:80px">
 			To: <input class="easyui-datebox" style="width:80px"> -->
 			<!-- Language: 
@@ -198,22 +217,18 @@
 		</div>
 	</div>
 	
-	<div id="addWin" class="easyui-window" title="添加用户" data-options="iconCls:'icon-save',closed:'true'" style="width:320px;height:220px;padding:5px;">
+	<div id="addWin" class="easyui-window" title="添加角色" data-options="iconCls:'icon-save',closed:'true'" style="width:320px;height:220px;padding:5px;">
 		<div class="easyui-layout" data-options="fit:true">
 			<div data-options="region:'center'" style="padding:10px;">
 			<form id="addff" method="post">
 	    	<table cellpadding="5">
 	    		<tr>
-	    			<td>姓名:</td>
-	    			<td><input class="easyui-textbox" type="text" name="realName" data-options="required:true"></input></td>
+	    			<td>角色名称:</td>
+	    			<td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
 	    		</tr>
 	    		<tr>
-	    			<td>用户名:</td>
-	    			<td><input class="easyui-textbox" type="text" name="username" data-options="required:true"></input></td>
-	    		</tr>
-	    		<tr>
-	    			<td>密码:</td>
-	    			<td><input class="easyui-textbox" type="text" name="password" data-options="required:true"></input></td>
+	    			<td>角色描述:</td>
+	    			<td><input class="easyui-textbox" type="text" name="description" data-options=""></input></td>
 	    		</tr>
 	    	</table>
 	    </form>
@@ -225,12 +240,38 @@
 		</div>
 	</div>
 	
-	<div id="roleWin" class="easyui-window" title="角色分配" data-options="iconCls:'icon-save',closed:'true'" style="width:400px;height:300px;padding:5px;">
+	<div id="updateWin" class="easyui-window" title="修改角色" data-options="iconCls:'icon-save',closed:'true'" style="width:320px;height:220px;padding:5px;">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'center'" style="padding:10px;">
+			<form id="updateff" method="post">
+			<input type="hidden" name="id" id="update_id"/>
+	    	<table cellpadding="5">
+	    		<tr>
+	    			<td>角色名称:</td>
+	    			<td><input class="easyui-textbox" type="text" id="update_name" name="name" data-options="required:true"></input></td>
+	    		</tr>
+	    		<tr>
+	    			<td>角色描述:</td>
+	    			<td><input class="easyui-textbox" type="text" id="update_description" name="description" data-options=""></input></td>
+	    		</tr>
+	    	</table>
+	    </form>
+			</div>
+			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:updateRoleSubmit()" style="width:80px">Ok</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:updateCancle()" style="width:80px">Cancel</a>
+			</div>
+		</div>
+	</div>
+	
+	<div id="resourceWin" class="easyui-window" title="菜单分配" data-options="iconCls:'icon-save',closed:'true'" style="width:400px;height:300px;padding:5px;">
 		<div class="easyui-layout" data-options="fit:true">
 			<div data-options="region:'center'" style="padding:10px;">
 				<input id="hidden_user_id" type="hidden"/>
-				<ul id="roles">
 				</ul>
+				<div class="easyui-panel" style="padding:5px">
+					<ul id="resources" class="easyui-tree" data-options="url:'',method:'get',animate:true,checkbox:true"></ul>
+				</div>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
 				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:roleSubmit()" style="width:80px">Ok</a>
