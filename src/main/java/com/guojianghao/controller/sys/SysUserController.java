@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,9 +42,10 @@ public class SysUserController {
 		return "sys/userList";
 	}
 	
-	@RequestMapping("/datagrid")
+	@RequestMapping(value = "/datagrid" , method = RequestMethod.POST)
 	@ResponseBody
-	public Object datagrid(@RequestParam(value = "page", required = false) int page,
+	public Object datagrid(HttpServletRequest request,
+			@RequestParam(value = "page", required = false) int page,
             @RequestParam(value = "rows", required = false) int rows,
             @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "realName", required = false) String realName) throws Exception{
@@ -64,7 +66,7 @@ public class SysUserController {
 		return ResponseUtil.INSTANCE.response(list, total);
 	}
 	
-	@RequestMapping("/saveUser")
+	@RequestMapping(value = "/saveUser",method = RequestMethod.POST)
 	@ResponseBody
 	public Object saveSysUser(SysUser sysUser){
 		
@@ -97,10 +99,12 @@ public class SysUserController {
 	public Object assignRoles(HttpServletRequest request,
 			@RequestParam(value = "roles[]") int[] roles,
 			@RequestParam(value = "userId") int userId){
-		
-		sysRoleService.deleteRoleByUserId(userId);
-		int saveResult = sysRoleService.saveRole(userId,roles);
-		return ResponseUtil.INSTANCE.response(saveResult);
+		int result = 0;
+		result = sysRoleService.deleteRoleByUserId(userId);
+		if(roles != null && roles.length > 0){
+			result = sysRoleService.saveRole(userId,roles);
+		}
+		return ResponseUtil.INSTANCE.response(result);
 	}
 
 	

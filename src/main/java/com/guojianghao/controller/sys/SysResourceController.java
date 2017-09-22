@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,7 +31,7 @@ public class SysResourceController {
 		return "sys/resourceList";
 	}
 	
-	@RequestMapping("/datagrid")
+	@RequestMapping(value = "/datagrid",method = RequestMethod.POST)
 	@ResponseBody
 	public Object datagrid(@RequestParam(value = "page", required = false) int page,
             @RequestParam(value = "rows", required = false) int rows,

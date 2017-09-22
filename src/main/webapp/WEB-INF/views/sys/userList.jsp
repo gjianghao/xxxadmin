@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8" isELIgnored="false"%>
+    pageEncoding="utf-8"  isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>    
-<%String path = request.getContextPath(); %>    
+<%String path = request.getContextPath(); %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户管理</title>
@@ -35,25 +35,25 @@
 	                var addRname = $("input[name='addRname']").val();
 	                var addPwd = $("input[name='addPwd']").val();
 	                if(addUname == ""){
-	                	$.messager.alert('Info', '用户名不能为空');
+	                	$.messager.alert('提示', '用户名不能为空');
 	                	return false;
 	                }
 	                if(addRname == ""){
-	                	$.messager.alert('Info', '姓名不能为空');
+	                	$.messager.alert('提示', '姓名不能为空');
 	                	return false;
 	                }
 	                if(addPwd == ""){
-	                	$.messager.alert('Info', '密码不能为空');
+	                	$.messager.alert('提示', '密码不能为空');
 	                	return false;
 	                }
 	        },
 	        success:function(data){
 	                if(data == "success"){
-	                	$.messager.alert('Info', '添加用户成功');
+	                	$.messager.alert('提示', '添加用户成功');
 	                	addClearForm();
 	                	$("#tt").datagrid('reload')
 	                }else{
-	                	$.messager.alert('Info', '添加用户失败');
+	                	$.messager.alert('提示', '添加用户失败');
 	                }
 	        }
 		});
@@ -127,11 +127,9 @@
 		$('input[name="roleId"]:checked').each(function(){ 
             roles += $(this).val()+",";
         });
-		if(roles.length == 0){
-			$.messager.alert('提示', '请选择角色再提交');
-			return;
+		if(roles.length > 0){
+			roles = roles.substring(0, roles.length-1)
 		}
-		roles = roles.substring(0, roles.length-1)
 		$.ajax({
 			   type: "POST",
 			   url: "<%=path%>/sysUser/assignRoles",
@@ -147,8 +145,6 @@
 			});
 		
 	}
-	
-	
 	function formatRole(val,row){
 		return '<span style=""><a style="text-decoration:none" href="javascript:void(0)" onclick="roleView('+row.id+')" >赋权</a></span>';
 	}
@@ -162,7 +158,7 @@
 </head>
 <body>
 	<table id="tt" class="easyui-datagrid" title="用户管理" pagination="true" fit="true" style="width:700px;height:250px"
-			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysUser/datagrid',method:'get',toolbar:'#tb'">
+			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysUser/datagrid',method:'post',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<th data-options="field:'id',width:100,align:'center',hidden:'true'">ID</th>
@@ -184,16 +180,6 @@
 		<div>
 			用户名: <input class="easyui-textbox" type="text" id="username"/> <!-- data-options="required:true" -->
 			姓名: <input class="easyui-textbox" type="text" id="realName"/>
-			<!-- Date From: <input class="easyui-datebox" style="width:80px">
-			To: <input class="easyui-datebox" style="width:80px"> -->
-			<!-- Language: 
-			<select class="easyui-combobox" panelHeight="auto" style="width:100px">
-				<option value="java">Java</option>
-				<option value="c">C</option>
-				<option value="basic">Basic</option>
-				<option value="perl">Perl</option>
-				<option value="python">Python</option>
-			</select> -->
 			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="doSearch()" iconCls="icon-search">Search</a>
 		</div>
 	</div>

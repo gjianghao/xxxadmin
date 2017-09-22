@@ -1,7 +1,11 @@
 package com.guojianghao.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +68,31 @@ public class SysRoleServiceImpl implements SysRoleService{
 	public int updateSysRole(SysRole role) {
 		return sysRoleMapper.updateByPrimaryKeySelective(role);
 	}
+	
+	@Override
+	public int deleteSysResourceByRoleId(int roleId) {
+		return sysRoleMapper.deleteSysResourceByRoleId(roleId);
+	}
+
+	@Override
+	public int assignSysResources(int roleId, int[] resources) {
+		List<Integer> list1 = new ArrayList<Integer>();
+		Set<Integer> set = new HashSet<Integer>();
+		for(int i = 0; i < resources.length; i++){
+			list1.add(resources[i]);
+			set.add(resources[i]);
+		}
+		List<SysRole> list = sysRoleMapper.queryParentIdByResourceId(list1);
+		for(int i = 0; i < list.size(); i++){
+			set.add(list.get(i).getId());
+		}
+		int result = 0;
+		Iterator<Integer> it = set.iterator();
+		while(it.hasNext()){
+			result += sysRoleMapper.saveRoleResource(roleId,it.next());
+		}
+		return result;
+	}
+	
 
 }

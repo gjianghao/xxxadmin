@@ -126,7 +126,7 @@
 </head>
 <body>
 	<table id="tt" class="easyui-datagrid" title="资源管理" pagination="true" fit="true" style="width:700px;height:250px"
-			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysResource/datagrid',method:'get',toolbar:'#tb'">
+			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysResource/datagrid',method:'post',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<th data-options="field:'id',width:100,align:'center',hidden:'true'">ID</th>

@@ -1,11 +1,12 @@
 package com.guojianghao.mapper.sys;
 
-import com.guojianghao.entity.sys.SysRole;
-import com.guojianghao.entity.sys.SysRoleExample;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.guojianghao.entity.sys.SysRole;
+import com.guojianghao.entity.sys.SysRoleExample;
 
 public interface SysRoleMapper {
 
@@ -84,4 +85,11 @@ public interface SysRoleMapper {
 	int getSysRoleCount(Map<String, Object> map);
 
 	List<SysRole> getSysRoleList(Map<String, Object> map);
+
+	int deleteSysResourceByRoleId(int roleId);
+
+	List<SysRole> queryParentIdByResourceId(List<Integer> resources);
+
+	int saveRoleResource(int roleId, Integer integer);
+
 }

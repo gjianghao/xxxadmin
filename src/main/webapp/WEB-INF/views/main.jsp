@@ -37,13 +37,13 @@
 		<!-- <div data-options="region:'east',split:true" title="East" style="width:180px;">
 			<ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true,dnd:true"></ul>
 		</div> -->
-		<div data-options="region:'west',split:true" title="导航" style="width:130px;">
+		<div data-options="region:'west',split:true" title="导航" style="width:150px;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
 				<c:forEach items="${listParentResource }" var="pr">
-					<div title="${pr.name }" data-options="selected:true" style="padding:10px;">
+					<div iconCls="icon-tree-p" title="${pr.name }" data-options="selected:false"  style="padding:10px;">
 						<c:forEach items="${listChildResource }" var="cr">
 							<c:if test="${pr.id == cr.parentId}"></c:if>
-							<a href="javascript:openTab('${cr.name }','<%=path %>/${cr.href}','icon-shujia')"
+							<a iconCls="icon-tree-c" href="javascript:openTab('${cr.name }','<%=path %>/${cr.href}','icon-shujia')"
 			                    class="easyui-linkbutton"
 			                    data-options="plain:true,iconCls:''"
 			                    style="width: 120px;">${cr.name }</a>

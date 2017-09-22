@@ -318,7 +318,7 @@
   
   
   <select id="getSysChildResourcesListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-  	select * from (select b.* from 
+  	select distinct * from (select b.* from 
 		(
 		select resource_id from sys_role_resource where role_id in(
 		select role_id from sys_user_role where user_id = #{id}
@@ -328,7 +328,7 @@
   </select>
   
   <select id="getSysParentResourcesListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-  	select * from (select b.* from 
+  	select distinct * from (select b.* from 
 		(
 		select resource_id from sys_role_resource where role_id in(
 		select role_id from sys_user_role where user_id = #{id}

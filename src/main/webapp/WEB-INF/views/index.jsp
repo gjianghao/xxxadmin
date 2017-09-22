@@ -12,6 +12,11 @@
 <script type="text/javascript" src="<%=path%>/static/js/login.js"></script>
 
 <script type="text/javascript">
+	$(document).keypress(function(e) {  
+		if(e.which == 13) {  
+			$(".button_blue").click();  
+		}  
+	}); 
 	function login(){
 		var username = $("#username").val();
 		var password = $("#password").val();

@@ -298,5 +298,22 @@
   	</if>
   </select>
   
+  <delete id="deleteSysResourceByRoleId" parameterType="java.lang.Integer">
+  	delete from sys_role_resource where role_id = #{roleId}
+  </delete>
+
+  <select id="queryParentIdByResourceId" resultMap="BaseResultMap">
+  	select * from (
+	  	select parent_id as id from sys_resource where id in
+	    <foreach collection="list" index="index" item="resources" open="(" separator="," close=")">  
+	        #{resources}  
+	    </foreach> 
+    ) t where t.id is not null 
+  </select> 	  
+
+	<insert id="saveRoleResource" parameterType="java.lang.Integer">
+		insert into sys_role_resource(role_id,resource_id) values(#{0},#{1})
+	</insert>
+  
   
 </mapper>

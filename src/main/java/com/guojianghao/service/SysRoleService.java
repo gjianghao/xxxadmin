@@ -25,4 +25,8 @@ public interface SysRoleService {
 
 	int updateSysRole(SysRole role);
 
+	int deleteSysResourceByRoleId(int roleId);
+
+	int assignSysResources(int roleId, int[] resources);
+
 }

@@ -117,61 +117,35 @@
 	}
 	
 	function resourceView(id){
-		$("#hidden_user_id").val(id);
-		$.ajax({
-			   type: "POST",
-			   url: "<%=path%>/sysRole/getResources",
-			   data: {'roleId':id},
-			   success: function(data){
-				   var allRoleList = data.data1;
-				   var selfRoleList = data.data2;
-				   var html = "";
-				   for(var i = 0; i < allRoleList.length; i++){
-					   var flag = "0"
-					   for(var j = 0; j < selfRoleList.length; j++){
-						   if(allRoleList[i].id == selfRoleList[j].id){
-								flag = "1";
-								continue;
-						   }
-					   }
-					   if(flag == "0"){
-						   html += "<li> <input type='checkbox' name='roleId' value='"+allRoleList[i].id+"'   />"+allRoleList[i].name+"</li>"
-					   }else{
-						   html += "<li> <input type='checkbox' checked name='roleId' value='"+allRoleList[i].id+"'   />"+allRoleList[i].name+"</li>"
-					   }
-				   }
-				   $("#roles").html(html);
-				   $('#roleWin').window('open');
-			   }
-			});
+		$("#hidden_role_id").val(id);
+		$('#treett').tree({  
+		    url:"<%=path%>/sysRole/getResources?roleId="+id    // The url will be mapped to NodeController class and getNodes method  
+		});
+		$('#resourceWin').window('open');
 	}
-	function roleCancle(){
-		$('#roleWin').window('close');
+	function resourceCancle(){
+		$('#resourceWin').window('close');
 	}
-	function roleSubmit(){
-		var roles = "";
-		$('input[name="roleId"]:checked').each(function(){ 
-            roles += $(this).val()+",";
-        });
-		if(roles.length == 0){
-			$.messager.alert('提示', '请选择角色再提交');
-			return;
+	function resourceSubmit(){
+		var resources = "";
+		var nodes = $('#treett').tree('getChecked');
+		for(var i=0; i<nodes.length; i++){
+			if (resources != '') resources += ',';
+			resources += nodes[i].id;
 		}
-		roles = roles.substring(0, roles.length-1)
 		$.ajax({
 			   type: "POST",
-			   url: "<%=path%>/sysUser/assignRoles",
-			   data: {'roles':roles.split(","),'userId':$("#hidden_user_id").val()},
+			   url: "<%=path%>/sysRole/assignResources",
+			   data: {'resources':resources.split(","),'roleId':$("#hidden_role_id").val()},
 			   success: function(data){
 				   if(data == "success"){
-					   $.messager.alert('提示', '分配角色成功');
-					   roleCancle();
+					   $.messager.alert('提示', '分配菜单成功');
+					   resourceCancle();
 				   }else{
-					   $.messager.alert('提示', '分配角色失败');
+					   $.messager.alert('提示', '分配菜单失败');
 				   }
 			   }
 			});
-		
 	}
 	
 	
@@ -183,7 +157,7 @@
 </head>
 <body>
 	<table id="tt" class="easyui-datagrid" title="角色管理" pagination="true" fit="true" style="width:700px;height:250px"
-			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysRole/datagrid',method:'get',toolbar:'#tb'">
+			data-options="rownumbers:true,singleSelect:true,url:'<%=path %>/sysRole/datagrid',method:'post',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<th data-options="field:'id',width:100,align:'center',hidden:'true'">ID</th>
@@ -267,15 +241,13 @@
 	<div id="resourceWin" class="easyui-window" title="菜单分配" data-options="iconCls:'icon-save',closed:'true'" style="width:400px;height:300px;padding:5px;">
 		<div class="easyui-layout" data-options="fit:true">
 			<div data-options="region:'center'" style="padding:10px;">
-				<input id="hidden_user_id" type="hidden"/>
-				</ul>
-				<div class="easyui-panel" style="padding:5px">
-					<ul id="resources" class="easyui-tree" data-options="url:'',method:'get',animate:true,checkbox:true"></ul>
-				</div>
+				<input id="hidden_role_id" type="hidden"/>
+						<ul id="treett" class="easyui-tree" checkbox="true">
+						</ul>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:roleSubmit()" style="width:80px">Ok</a>
-				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:roleCancle()" style="width:80px">Cancel</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:resourceSubmit()" style="width:80px">Ok</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:resourceCancle()" style="width:80px">Cancel</a>
 			</div>
 		</div>
 	</div>

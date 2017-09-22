@@ -87,4 +87,5 @@ public interface SysResourceMapper {
 	List<SysResource> getAllResourceList();
 
 	List<SysResource> getSelfResourceList(int roleId);
+
 }
