@@ -26,4 +26,6 @@ public interface SysResourceService {
 
 	List<SysResource> getSelfResourceList(int roleId);
 
+	List<SysResource> getSysParentResourcesList();
+
 }

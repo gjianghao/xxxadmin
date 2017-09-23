@@ -1,5 +1,6 @@
 package com.guojianghao.controller.sys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,12 +65,30 @@ public class LoginController {
 		int id = user.getId();
 		List<SysResource> listParentResource = sysResourceService.getSysParentResourcesListByUserId(id);
 		List<SysResource> listChildResource = sysResourceService.getSysChildResourcesListByUserId(id);
-		model.addAttribute("listParentResource", listParentResource);
-		model.addAttribute("listChildResource", listChildResource);
+		List<SysResource> list = handleResourceList(listParentResource,listChildResource);
+		model.addAttribute("list", list);
 		model.addAttribute("username", user.getRealName());
 		return "main";
 	}
 	
+	private List<SysResource> handleResourceList(List<SysResource> listParentResource, List<SysResource> listChildResource) {
+		
+		if(listParentResource != null && listParentResource.size() > 0){
+			for(SysResource r1 : listParentResource){
+				List<SysResource> list = new ArrayList<SysResource>();
+				if(listChildResource != null && listChildResource.size() > 0){
+					for(SysResource r2 : listChildResource){
+						if(r1.getId() == r2.getParentId()){
+							list.add(r2);
+						}
+					}
+				}
+				r1.setList(list);
+			}
+		}
+		return listParentResource;
+	}
+
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request){
 		request.getSession().removeAttribute("user");

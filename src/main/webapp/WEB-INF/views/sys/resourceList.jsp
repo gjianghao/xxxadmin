@@ -24,6 +24,19 @@
 	}
 	
 	function addView(){
+		$('#addff').form('clear');
+		$.ajax({
+			   type: "POST",
+			   url: "<%=path%>/sysResource/getParentResourcesList",
+			   success: function(data){
+				   var result = data.data1;
+				   $('#parent_id').combobox({
+                       data: result,                        
+                       valueField: 'id',
+                       textField: 'name'}
+                       );  
+			   }
+			});
 		$('#addWin').window('open');
 	}
 	function addSubmitForm(){
@@ -63,7 +76,20 @@
 		$("#update_name").textbox('setValue',row.name);
 		$("#update_href").textbox('setValue',row.href);
 		$("#update_description").textbox('setValue',row.description);
-		$('#updateWin').window('open');
+		$.ajax({
+			   type: "POST",
+			   url: "<%=path%>/sysResource/getParentResourcesList",
+			   success: function(data){
+				   var result = data.data1;
+				   $('#update_parent_id').combobox({
+                    data: result,                        
+                    valueField: 'id',
+                    textField: 'name'}
+                    );  
+				   $("#update_parent_id").combobox("setValue",row.parentId);
+				   $('#updateWin').window('open');
+			   }
+			});
 	}
 	function updateCancle(){
 		$('#updateWin').window('close');
@@ -121,6 +147,8 @@
 		var unixTimestamp = new Date(value);  
 		return unixTimestamp.toLocaleString();  
 	}
+	
+	
 
 </script>
 </head>
@@ -161,7 +189,7 @@
 		</div>
 	</div>
 	
-	<div id="addWin" class="easyui-window" title="添加菜单" data-options="iconCls:'icon-save',closed:'true'" style="width:320px;height:220px;padding:5px;">
+	<div id="addWin" class="easyui-window" title="添加菜单" data-options="iconCls:'icon-save',closed:'true'" style="width:400px;height:280px;padding:5px;">
 		<div class="easyui-layout" data-options="fit:true">
 			<div data-options="region:'center'" style="padding:10px;">
 			<form id="addff" method="post">
@@ -178,6 +206,12 @@
 	    			<td>菜单描述:</td>
 	    			<td><input class="easyui-textbox" type="text" name="description" data-options=""></input></td>
 	    		</tr>
+	    		<tr>
+	    			<td>所属菜单:</td>
+	    			<td>
+	    				<input id="parent_id" name="parentId" class="easyui-combobox" width="150px">
+	    			</td>
+	    		</tr>
 	    	</table>
 	    </form>
 			</div>
@@ -188,7 +222,7 @@
 		</div>
 	</div>
 	
-	<div id="updateWin" class="easyui-window" title="修改角色" data-options="iconCls:'icon-save',closed:'true'" style="width:320px;height:220px;padding:5px;">
+	<div id="updateWin" class="easyui-window" title="修改角色" data-options="iconCls:'icon-save',closed:'true'" style="width:400px;height:280px;padding:5px;">
 		<div class="easyui-layout" data-options="fit:true">
 			<div data-options="region:'center'" style="padding:10px;">
 			<form id="updateff" method="post">
@@ -205,6 +239,12 @@
 	    		<tr>
 	    			<td>菜单描述:</td>
 	    			<td><input class="easyui-textbox" type="text" id="update_description" name="description" data-options=""></input></td>
+	    		</tr>
+	    		<tr>
+	    			<td>所属菜单:</td>
+	    			<td>
+	    				<input id="update_parent_id" name="parentId" class="easyui-combobox" width="150px">
+	    			</td>
 	    		</tr>
 	    	</table>
 	    </form>

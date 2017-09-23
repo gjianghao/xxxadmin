@@ -65,5 +65,10 @@ public class SysResourceServiceImpl implements SysResourceService{
 	public List<SysResource> getSelfResourceList(int roleId) {
 		return sysResourceMapper.getSelfResourceList(roleId);
 	}
+
+	@Override
+	public List<SysResource> getSysParentResourcesList() {
+		return sysResourceMapper.getSysParentResourcesList();
+	}
 	
 }

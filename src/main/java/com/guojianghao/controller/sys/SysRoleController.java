@@ -104,7 +104,6 @@ public class SysRoleController {
 
 	private List<TreeData> handlerTree(List<SysResource> allResourceList, List<SysResource> selfResourceList) {
 		
-		List<TreeData> data = new ArrayList<TreeData>();
 		List<TreeData> list = new ArrayList<TreeData>();
 		for(SysResource r1 : allResourceList){
 			if(r1.getParentId() == null){
@@ -133,14 +132,7 @@ public class SysRoleController {
 				list.add(tree);
 			}
 		}
-		
-		TreeData t = new TreeData();
-		t.setId(1000000);
-		t.setText("菜单");
-		t.setChildren(list);
-		t.setState("open");
-		data.add(t);
-		return data;
+		return list;
 	}
 	
 	

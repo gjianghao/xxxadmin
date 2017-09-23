@@ -39,10 +39,9 @@
 		</div> -->
 		<div data-options="region:'west',split:true" title="导航" style="width:150px;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
-				<c:forEach items="${listParentResource }" var="pr">
-					<div iconCls="icon-tree-p" title="${pr.name }" data-options="selected:false"  style="padding:10px;">
-						<c:forEach items="${listChildResource }" var="cr">
-							<c:if test="${pr.id == cr.parentId}"></c:if>
+				<c:forEach items="${list }" var="res">
+					<div iconCls="icon-tree-p" title="${res.name }" data-options="selected:false"  style="padding:10px;">
+						<c:forEach items="${res.list }" var="cr">
 							<a iconCls="icon-tree-c" href="javascript:openTab('${cr.name }','<%=path %>/${cr.href}','icon-shujia')"
 			                    class="easyui-linkbutton"
 			                    data-options="plain:true,iconCls:''"

@@ -1,6 +1,8 @@
 package com.guojianghao.entity.sys;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 
@@ -46,6 +48,9 @@ public class SysResource {
 	 * @return  the value of sys_resource.id
 	 * @mbg.generated  Thu Sep 21 14:21:59 SGT 2017
 	 */
+	
+	private List<SysResource> list = new ArrayList<SysResource>();
+	
 	public Integer getId() {
 		return id;
 	}
@@ -165,6 +170,14 @@ public class SysResource {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<SysResource> getList() {
+		return list;
+	}
+
+	public void setList(List<SysResource> list) {
+		this.list = list;
 	}
 
 	@Override

@@ -88,4 +88,6 @@ public interface SysResourceMapper {
 
 	List<SysResource> getSelfResourceList(int roleId);
 
+	List<SysResource> getSysParentResourcesList();
+
 }

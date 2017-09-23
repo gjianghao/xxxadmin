@@ -362,5 +362,9 @@
   	where 1=1 and t1.role_id = #{roleId}
   </select>
   
+  <select id="getSysParentResourcesList" resultMap="BaseResultMap">
+  	select * from sys_resource where parent_id is null
+  </select>
+  
   
 </mapper>
